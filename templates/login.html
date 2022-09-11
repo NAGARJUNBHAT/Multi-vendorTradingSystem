@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="login-page">
+
+
+    <form action="/login" method="POST">
+        <div class="form-heading">Login</div>
+
+        {{ form.hidden_tag() }}
+        <div class="form-control-group">
+            {{ form.username.label(class='form-control-label') }}
+            {{ form.username(class='form-control-input') }}
+
+            {% if form.username.errors %}
+            <div class="errors">
+                {% for error in form.username.errors %}
+                <b>{{ error }}</b>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-control-group form-password-control-group">
+            {{ form.password.label(class='form-control-label') }}
+            {{ form.password(class='form-control-input') }}
+
+            {% if form.password.errors %}
+            <div class="errors">
+                {% for error in form.password.errors %}
+                <b>{{ error }}</b>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+
+        <div class="form-control-group remember-me-group">
+            {{ form.remember_me.label(class='remember-me-label') }}
+
+            {{ form.remember_me(class='remember-me-checkbox') }}
+        </div>
+
+        <div class="form-control-group">
+            {{ form.submit(class='button submit-btn') }}
+        </div>
+
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}

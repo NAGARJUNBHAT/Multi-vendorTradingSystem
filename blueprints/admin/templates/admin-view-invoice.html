@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="main-content">
+    <a href="{{ url_for("admin.home") }}" class='back-link'>Go Back</a>
+
+    <p>Invoice ID #{{ invoice.get("invoice_id") }}</p>
+    <p>Username: {{ invoice.get("customer_username") }}</p>
+    <p>User Address: {{ invoice.get("customer_address") }}</p>
+
+    <table>
+        <tr>
+            <th>Product Name</th>
+            <th>Product Quantity</th>
+            <th>Product Price</th>
+        </tr>
+        {% for item in invoiceItems %}
+        <tr>
+            <td>{{ item.get("product_name") }}</td>
+            <td> {{ item.get("quantity") }}</td>
+            <td>  {{ item.get("product_price") *  item.get("quantity") }}</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+    <p>Order Total = {{ invoice.get("order_total") }}</p>
+</div>
+
+{% endblock %}

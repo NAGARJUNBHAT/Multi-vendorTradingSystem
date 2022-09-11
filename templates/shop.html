@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% include "navbar.html" %}
+
+<div class="main-content shop-page">
+
+  <div class="shop-details">
+      <h5 class="shop-name">{{ shop.get("shopname") }}</h5>
+      <h5 class="shop-description">{{ shop.get("shop_description") }}</h5>
+      <h5 class="shop-location">{{ shop.get("shop_address") }}</h5>
+  </div>
+
+
+  {% if not products %}
+    <div class="top-heading">No products have been listed by this shop.</div>
+  {% else %}
+
+  
+  <div class="products-list">
+
+
+    {% for product in products %}
+    <div class="product-card" data-id="{{ product.get("product_id") }}">
+      <div class="card-body">
+        <img  class="product-image" src="{{ url_for("product_image", product_id=product.get("product_id")) }}">
+        <h5 class="product-name">{{ product.get("product_name") }}</h5>
+        
+        <div class="flex-group"> 
+          <h5 class="product price">Rs. {{product.get("product_price")}}/&hyphen;</h5>
+          
+          {% if not is_shopkeeper %}
+              <button class="button add-to-cart">Add To Cart</button>
+              {% else %}
+              <button class="button manage-product">Manage Product</button>
+          {% endif %}
+
+        </div>
+
+      </div>
+</div>
+    {% endfor %}
+  
+  </div>
+
+  {% endif %}
+
+  </div>
+
+</div>
+
+<script>
+
+  function handleClick(evt) {
+    const product_id = evt.target.closest(".product-card").getAttribute("data-id")
+    const request = fetch(`{{url_for("cart.add_to_cart")}}`, 
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        shop_id: `{{shop.get("shop_id")}}`,
+        quantity: 1,
+        product_id, 
+      })
+    })
+
+
+    request.then(response => {
+      return response.json()
+    }).then((data) => {
+      
+        Swal.fire({
+          title: data.message,
+          icon: data.status,
+          toast:true,
+          position:'top',
+          confirmButtonText: 'Ok'
+        })
+
+      
+      
+    }).catch((err) => {
+      Swal.fire({
+          title: "Something went wrong!",
+          icon: "error",
+          toast:true,
+          position:'top',
+          confirmButtonText: 'Ok'
+        })
+    })
+
+  }
+
+
+  const add_to_cart_btns = document.getElementsByClassName("add-to-cart")
+
+  for(const btn of add_to_cart_btns) {
+    btn.addEventListener("click", handleClick)
+  }
+
+</script>
+
+
+{% endblock %}

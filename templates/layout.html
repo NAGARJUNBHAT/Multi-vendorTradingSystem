@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% if title %}
+        <title>{{ title }}</title>
+   {% else %}
+   <title>E-shopping</title>
+   {% endif %}
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+   <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+
+</head>
+
+<body>
+
+            {% block content %}{% endblock %}
+     
+
+            <script>
+
+               {% for type,msg in get_flashed_messages(with_categories=true)%}
+                   
+               Swal.fire({
+                  title: "{{msg}}",
+                  icon: "{{type}}",
+                  timer: 2000,
+                  toast:true,
+                  position:'top',
+                  confirmButtonText: 'Ok'
+               });
+           
+               {% endfor %}
+           
+           </script>
+
+
+</body>
+
+</html>

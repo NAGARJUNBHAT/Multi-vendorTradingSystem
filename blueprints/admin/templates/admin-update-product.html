@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="main-content update-product-page">
+    <a href="{{ url_for("admin.view_shop", shop_id=shop.get("shop_id")) }}" class='back-link' >Go Back</a>
+    <span class="top-heading">Edit Product</span>
+
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+
+                <div class="form-group">
+                    {{ form.product_name.label(class="form-input-label") }}
+
+                    {% if form.product_name.errors %}
+                    {{ form.product_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.product_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.product_name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.product_description.label(class="form-input-label") }}
+
+                    {% if form.product_description.errors %}
+                    {{ form.product_description(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.product_description.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.product_description(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.product_price.label(class="form-input-label") }}
+
+                    {% if form.product_price.errors %}
+                    {{ form.product_price(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.product_price.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.product_price(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+              
+                <div class="form-group">
+                    {{ form.product_image.label(class="form-input-label") }}
+                    <img src="{{ url_for("product_image", product_id=product.get("product_id")) }}" />
+                    {% if form.product_image.errors %}
+                    {{ form.product_image(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.product_image.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.product_image(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+               
+        
+                <button type="submit" class="button">Update Product</button>
+                
+    </form>
+
+</div>
+
+{% endblock %}

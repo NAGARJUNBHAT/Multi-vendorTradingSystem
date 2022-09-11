@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+
+
+<div class="main-content">
+    <a href="{{ url_for("my_orders") }}" class="top-heading" type="button">Go Back</a>
+    <div class="order-details">
+            <span class="order-status">{{order.get("status")}}</span>
+            <span class="order-id">Order #{{order.get("order_id")}}</span>
+
+            <span class="order-shop-name">{{order.get("shopname")}}</span>
+            
+            <div class="order-items-container">
+                {% for order_item in order.get("order_items") %}
+                <div class="order-item">
+                    <span class="order-item-image"><img src="{{ url_for("product_image", product_id=order_item.get("product_id")) }}" alt=""></span>
+                    <span class="order-item-name">{{ order_item.get("product_name") }}</span>
+                    <span class="order-item-price-quantity">Rs. {{ order_item.get("product_price") }} x {{ order_item.get("quantity") }} pcs.</span>
+                    <span class="order-item-total">Rs. {{ order_item.get("product_total") }}</span>
+                </div>
+                {% endfor %}
+            </div>
+                
+          
+            <span class="order-total">Order Total Rs. {{ order.get("order_total") }}/&hyphen;</span>
+
+            {% if not order.get("status") in ["cancelled", "delivered", "rejected"] %}
+         
+                <div class="order-action-buttons">
+                    <a href="{{ url_for("order_cancel", order_id=order.get("order_id")) }}" class="button">Cancel</a>
+                </div>                      
+            
+            {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

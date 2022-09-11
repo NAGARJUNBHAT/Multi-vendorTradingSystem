@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+<div class="admin-content">
+    
+    <div class="my-shops-section">
+        <a class="button new-shop-btn"  href="{{ url_for("admin.new_shop")}}">Add Shop</a>
+        <div class="top-heading">My Shops</div>
+
+        {% if not shops %}
+        <div>No shops added.</div>
+        {% else %}
+            {% for shop in shops %}
+            <a href="{{ url_for("admin.view_shop", shop_id=shop.get("shop_id")) }}" class="shop-card">
+                {{shop.get("shopname")}}
+            </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="orders-section">
+        <div class="top-heading" style="display:flex; justify-content: space-between;">Orders <a class="button" href="{{ url_for("admin.view_invoices") }}">Invoices</a></div>
+        <div class="orders-list">
+            {%if not orders %}
+                <div>No orders.</div>
+            {% else %}
+                {% for order in orders %}
+                    <div class="order-item" data-view-order="{{url_for("admin.view_order", order_id=order.get("order_id"))}}">
+                        <span class="order-id">#{{ order.get("order_id") }}</span>
+                        <span class="order-address">{{order.get("order-address")}}</span>
+                        <span class="order-time">{{ order.get("date_ordered") }}</span>
+                        <span class="order-status">{{order.get("status")}}</span>
+                        
+                            {% if order.get("status") == "processing" %}
+                            <div class="order-action-buttons">
+                                
+                                <a href="{{ url_for("admin.accept_order", order_id=order.get("order_id")) }}" class="button">Accept</a>
+                                <a href="{{ url_for("admin.reject_order", order_id=order.get("order_id")) }}" class="button">Reject</a>
+                                
+                            </div>
+                            {% elif order.get("status") == "accepted" %}
+                            <div class="order-action-buttons">
+                                <a href="{{ url_for("admin.deliver_order", order_id=order.get("order_id")) }}" class="button">Deliver</a>
+                            </div>
+                            {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+    </div>
+</div>
+
+<script>
+
+const orders = document.getElementsByClassName("order-item")
+
+
+
+for(const order of orders) {
+     order.addEventListener("click", handleOrderClick)
+}
+
+
+function handleOrderClick(event) {
+  if(event.target.classList.contains("button")) return;
+   window.location.href = event.target.closest(".order-item").getAttribute("data-view-order")
+}
+
+</script>
+
+
+{% endblock %}

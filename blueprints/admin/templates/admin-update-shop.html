@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="main-content update-shop-page">
+    <a href="{{ url_for("admin.home") }}" class='back-link'>Go Back</a>
+
+    <h3>Update Shop Details</h3>
+
+    <form action="{{ url_for(request.endpoint, shop_id=shop.get("shop_id")) }}" method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.shopname.label(class="form-input-label") }}
+
+                    {% if form.shopname.errors %}
+                    {{ form.shopname(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.shopname.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.shopname(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.shop_address.label(class="form-input-label") }}
+
+                    {% if form.shop_address.errors %}
+                    {{ form.shop_address(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.shop_address.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.shop_address(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.shop_description.label(class="form-input-label") }}
+
+                    {% if form.shop_description.errors %}
+                    {{ form.shop_description(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.shop_description.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.shop_description(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.shop_image.label(class="form-input-label") }}
+                    <img src="{{ url_for("shop_image", shop_id=shop.get("shop_id")) }}" />
+                    {% if form.shop_image.errors %}
+                    {{ form.shop_image(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.shop_image.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.shop_image(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+               
+        
+     
+        {{form.submit(class="btn btn-outline-info")}}
+        
+    </form>
+
+</div>
+
+{% endblock %}

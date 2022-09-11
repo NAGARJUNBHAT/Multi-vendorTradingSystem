@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+
+
+<div class="main-content">
+
+    <h2 class="top-heading">My Orders</h2>
+
+    {% if not orders %}
+    <div>You have not placed any orders yet.</div>
+    {% else %}
+        <div class="orders-list-container">
+            {% for order in orders %}
+                <a class="order-item" href="{{ url_for("order_view",order_id=order.get("order_id")) }}">
+                    <span class="order-id">#{{ order.get("order_id") }}</span>
+                    <span class="order-shop">{{ order.get("shopname") }}</span>
+                    <div class="row">
+                        <span class="order-date">{{ order.get("date_ordered") }}</span>
+                        <span class="order-status">{{ order.get("status") }}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+</div>
+
+
+{% endblock %}

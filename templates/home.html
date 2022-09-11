@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+<div class="main-content">
+
+        <div class="top-heading">
+            Find Shop
+        </div>
+        <div class="shops-list">
+          
+          {% if not shops %}
+          <span>No shops are available.</span>
+          {% else %}
+            {% for shop in shops %} 
+              <a class="shop-card" href="{{ url_for("admin.view_shop", shop_id=shop.get('shop_id')) if is_shopkeeper else  "/shop/"+shop.get('shop_id') }}">
+                <div class="card-body">
+                <div class="left">
+                  <img src="{{ url_for("shop_image", shop_id=shop.get("shop_id")) }}" />
+                </div>
+                  <div class="right">
+                    <h5 class="shop-name">{{ shop.get("shopname") }}</h5>
+                    <h5 class="shop-description">{{ shop.get("shop_description") }}</h5>
+                    <h5 class="shop-location">{{ shop.get("shop_address") }}</h5>
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          {% endif %}
+      
+        </div>
+
+</div>
+
+{% endblock %}

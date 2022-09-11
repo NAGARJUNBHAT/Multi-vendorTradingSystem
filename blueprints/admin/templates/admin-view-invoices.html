@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="main-content">
+    <a href="{{ url_for("admin.home") }}" class='back-link'>Go Back</a>
+
+    <h3 class="top-heading">Generated Invoices.</h3>
+
+    {% if not invoices %}
+        <h5>There are no invoices.</h5>
+
+    {% else %}
+        {% for invoice in invoices %}
+        <a class="invoice-item" href="{{ url_for("admin.view_invoice", invoice_id=invoice.get("invoice_id")) }}">
+            
+            <span class="invoice-shop">Shop Name - {{ invoice.get("shopname") }}</span>
+            <span class="invoice-id">Invoice ID #{{ invoice.get("invoice_id") }}</span>
+            <span class="order-id">Order ID #{{ invoice.get("order_id") }}</span>
+            <span class="invoice-date">{{ invoice.get("date_ordered") }}</span>
+
+        </a>
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+{% endblock %}

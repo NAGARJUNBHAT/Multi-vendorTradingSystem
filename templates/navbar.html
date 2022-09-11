@@ -1,0 +1,38 @@
+
+<nav class="navbar">
+  
+  
+    {% if title %}
+    <a class="heading" href={{header_link or "/"}}>E-shopping </a> <span class="text-primary">{{title}}</span>
+    {% else %}
+    <a class="heading" href={{header_link or "/"}}>E-shopping</a>
+  {% endif %}
+  
+      {% if current_user and current_user.is_authenticated %}
+        {% if current_user.user_type == "shopkeeper" %}
+        <div class="btn-group">
+          <span class="greeting">Hi {{ current_user.id }}!</span>
+          {% if not hide_admin_button %} 
+            <a class="button" href="/admin">View Admin Panel</a>
+          {% endif %}
+          <a class="button" href="{{ url_for("admin.view_invoices") }}">View Invoices</a>
+
+          <a class="button" href="/logout">Logout</a>
+        </div>
+        {% else %}
+          <div class="btn-group">
+            <span class="greeting">Hi {{ current_user.id }}!</span>
+            <a class="button" href="{{ url_for("view_my_invoices") }}">View Invoices</a>
+            <a class="button" href="{{ url_for("my_orders") }}">My Orders</a>
+            <a class="button" href="{{ url_for("cart.home") }}">View Cart</a>
+            <a class="button" href="{{ url_for("logout") }}">Logout</a>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="btn-group">
+          <a class="button" href="/register">Register</a>
+          <a class="button" href="/login">Login</a>
+        </div>
+      {% endif %}
+    </div>
+  </nav>

@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="register-page">
+
+    <form action="/register" method="POST">
+        <div class="form-heading">Register</div>
+
+        {{ form.hidden_tag() }}
+        <div class="form-control-group">
+            {{ form.username.label(class="form-control-label") }}
+            {{ form.username(class="form-control-input ") }}
+
+            {% if form.username.errors %}
+            <div class="errors">
+                {% for error in form.username.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-control-group">
+            {{ form.password.label(class="form-control-label") }}
+            {{ form.password(class="form-control-input ") }}
+
+            {% if form.password.errors %}
+            <div class="errors">
+                {% for error in form.password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+
+
+        <div class="form-control-group">
+            {{ form.confirm_password.label(class="form-control-label") }}
+            {{ form.confirm_password(class="form-control-input ") }}
+
+            {% if form.confirm_password.errors %}
+            <div class="errors">
+                {% for error in form.confirm_password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+
+        <div class="form-control-group">
+            {{ form.email.label(class="form-control-label") }}
+            {{ form.email(class="form-control-input ") }}
+
+            {% if form.email.errors %}
+            <div class="errors">
+                {% for error in form.email.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-control-group">
+            {{ form.address.label(class="form-control-label") }}
+            {{ form.address(class="form-control-input ") }}
+
+            {% if form.address.errors %}
+            <div class="errors">
+                {% for error in form.address.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-control-group user-type-control-group">
+            {{ form.user_type.label(class="form-control-label") }}
+            {{ form.user_type() }}
+
+            {% if form.user_type.errors %}
+            <div class="errors">
+                {% for error in form.user_type.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-control-group">
+            {{ form.submit(class="submit-btn") }}
+        </div>
+
+
+
+    </form>
+</div>
+{% endblock %}

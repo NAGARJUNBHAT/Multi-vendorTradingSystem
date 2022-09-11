@@ -1,0 +1,173 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+
+
+<div class="main-content">
+
+    <h2 class="top-heading">My Cart</h2>
+
+    {% if not cart %}
+    <div>No items in cart.</div>
+    {% else %}
+    <div class="outer-container">
+        <div class="cart-item-container">
+            {% for product in cart %}
+            <div class="cart-item" data-id="{{ product.get("product_id") }}">
+
+                <button class="remove-item"></button>
+
+                <div class="cart-image"><img
+                        src="{{ url_for("product_image", product_id=product.get("product_id")) }}" /></div>
+                <div class="center">
+                    <span class="cart-product-name">{{ product.get("product_name") }}</span>
+                    <div class="controls-group-container">
+                        <div class="controls-group">
+                            <button class="quantity-btn increase-quantity">+</button>
+                            <input type="number" class="quantity" min="1" step="1" max="100" value="{{ product.get("quantity") }}">
+                            <button class="quantity-btn decrease-quantity">-</button>
+                        </div>
+                        <span class="price">₹{{ product.get("product_price") | int }}</span>
+
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="price-details">
+            <span class="title">Price Details</span>
+            <div class="row">
+                <span class="total-amount">₹{{total_price | int}}</span>
+                <button id="place-order-btn">Place Order</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+
+<script>
+
+    function changeQuantity(quantity, product_id, cb=()=>{}) {
+      
+        const request = fetch(`{{url_for("cart.add_to_cart")}}`, 
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                quantity,
+                product_id, 
+            })
+        })
+
+        request.then(response => {
+        return response.json()
+        }).then((data) => {
+        
+            Swal.fire({
+            title: data.message,
+            icon: data.status,
+            timer: 2000,
+            toast:true,
+            position:'top',
+            confirmButtonText: 'Ok'
+            })
+
+        if(data.status != "error") cb();
+        
+        }).catch((err) => {
+        Swal.fire({
+            title: "Something went wrong!",
+            icon: "error",
+            toast:true,
+            timer: 2000,
+            position:'top',
+            confirmButtonText: 'Ok'
+            })
+        })
+
+    }
+
+    function handleOnChange(evt) {
+        const new_quantity = evt.target.value
+        const product_id = evt.target.closest(".cart-item").getAttribute("data-id")
+        changeQuantity(new_quantity, product_id)
+    }
+
+    function handleOnClick(evt) {
+        const old_quantity = parseInt(evt.target.closest(".cart-item").querySelector(".quantity").value)
+
+        const product_id = evt.target.closest(".cart-item").getAttribute("data-id")
+        
+        let new_quantity = old_quantity;
+    
+        if(evt.target.innerText.trim() == "+") new_quantity += 1
+        else {
+            if(old_quantity == 1) return;
+            new_quantity -= 1
+        }
+        
+        changeQuantity(new_quantity, product_id, () => {
+            evt.target.closest(".cart-item").querySelector(".quantity").value = new_quantity;
+            refreshTotalPrice();
+        })
+
+
+    }
+
+    async function refreshTotalPrice(){
+        let response = await fetch(`{{url_for("cart.home")}}`, 
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+
+        let json = await response.json()
+
+        document.querySelector(".total-amount").innerText = "₹" + json.total_price
+
+        
+    }
+
+    const quantity_textboxes = document.getElementsByClassName("quantity")
+    for(const qtb of quantity_textboxes) {
+        qtb.addEventListener("change", handleOnChange)
+    }
+   
+    const quantity_buttons = document.getElementsByClassName("quantity-btn")
+    for(const qtb of quantity_buttons) {
+        qtb.addEventListener("click", handleOnClick)
+    }
+
+
+    const place_order_btn = document.getElementById("place-order-btn");
+    place_order_btn != null && place_order_btn.addEventListener("click", () => {
+
+        const request = fetch(`{{url_for("cart.place_order")}}`, 
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+
+        request.then(response => {
+        return response.json()
+        }).then((data) => {
+            if(data.status == "success") window.location.reload()
+        })
+
+    })
+
+</script>
+
+{% endblock %}

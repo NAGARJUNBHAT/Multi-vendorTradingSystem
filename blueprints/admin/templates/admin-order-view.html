@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+
+
+<div class="main-content">
+    <a href="{{ url_for("my_orders") }}" class='back-link'>Go Back</a>
+    <div class="order-details">
+            <span class="order-status">{{order.get("status")}}</span>
+            <span class="order-shop-name">{{order.get("shopname")}}</span>
+            <span class="order-id">Order #{{order.get("order_id")}}</span>
+            <p class="order-address">customer username: {{order.get("username")}}</p>
+            <p class="order-address">customer address: {{order.get("address")}}</p>
+            
+            <div class="order-items-container">
+                {% for order_item in order.get("order_items") %}
+                <div class="order-item">
+                    <span class="order-item-image"><img src="{{ url_for("product_image", product_id=order_item.get("product_id")) }}" alt=""></span>
+                    <span class="order-item-name">{{ order_item.get("product_name") }}</span>
+                    <span class="order-item-price-quantity">Rs. {{ order_item.get("product_price") }} x {{ order_item.get("quantity") }} pcs.</span>
+                    <span class="order-item-total">Rs. {{ order_item.get("product_total") }}</span>
+                </div>
+                {% endfor %}
+            </div>
+                
+          
+            <span class="order-total">Order Total Rs. {{ order.get("order_total") }}/&hyphen;</span>
+
+      
+            {% if order.get("status") == "processing" %}
+            <div class="order-action-buttons">
+                
+                <a href="{{ url_for("admin.accept_order", order_id=order.get("order_id")) }}" class="button">Accept</a>
+                <a href="{{ url_for("admin.reject_order", order_id=order.get("order_id")) }}" class="button">Reject</a>
+                
+            </div>
+            {% elif order.get("status") == "accepted" %}
+            <div class="order-action-buttons">
+                <a href="{{ url_for("admin.deliver_order", order_id=order.get("order_id")) }}" class="button">Deliver</a>                
+                <a href="{{ url_for("admin.reject_order", order_id=order.get("order_id")) }}" class="button">Reject</a>
+            </div>
+            {% endif %}
+            
+
+    </div>
+</div>
+
+{% endblock %}
